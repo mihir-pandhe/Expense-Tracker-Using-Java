@@ -20,10 +20,13 @@ public class ExpenseTracker {
             System.out.println("\n1. Add Expense");
             System.out.println("2. List Expenses");
             System.out.println("3. Display Total Expenses");
-            System.out.println("4. Exit");
+            System.out.println("4. Delete Expense");
+            System.out.println("5. Update Expense");
+            System.out.println("6. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
+
             if (choice == 1) {
                 System.out.print("Enter description: ");
                 String description = scanner.nextLine();
@@ -36,6 +39,19 @@ public class ExpenseTracker {
             } else if (choice == 3) {
                 displayTotalExpenses();
             } else if (choice == 4) {
+                System.out.print("Enter expense number to delete: ");
+                int index = scanner.nextInt();
+                deleteExpense(index - 1);
+            } else if (choice == 5) {
+                System.out.print("Enter expense number to update: ");
+                int index = scanner.nextInt();
+                scanner.nextLine();
+                System.out.print("Enter new description: ");
+                String description = scanner.nextLine();
+                System.out.print("Enter new amount: ");
+                double amount = scanner.nextDouble();
+                updateExpense(index - 1, description, amount);
+            } else if (choice == 6) {
                 break;
             } else {
                 System.out.println("Invalid choice. Please try again.");
@@ -48,8 +64,9 @@ public class ExpenseTracker {
         if (expenses.isEmpty()) {
             System.out.println("No expenses available.");
         } else {
-            for (Expense expense : expenses) {
-                System.out.println(expense.description + ": $" + expense.amount);
+            for (int i = 0; i < expenses.size(); i++) {
+                Expense expense = expenses.get(i);
+                System.out.println((i + 1) + ". " + expense.description + ": $" + expense.amount);
             }
         }
     }
@@ -60,5 +77,25 @@ public class ExpenseTracker {
             total += expense.amount;
         }
         System.out.println("Total Expenses: $" + total);
+    }
+
+    private static void deleteExpense(int index) {
+        if (index >= 0 && index < expenses.size()) {
+            expenses.remove(index);
+            System.out.println("Expense deleted successfully.");
+        } else {
+            System.out.println("Invalid expense number.");
+        }
+    }
+
+    private static void updateExpense(int index, String description, double amount) {
+        if (index >= 0 && index < expenses.size()) {
+            Expense expense = expenses.get(index);
+            expense.description = description;
+            expense.amount = amount;
+            System.out.println("Expense updated successfully.");
+        } else {
+            System.out.println("Invalid expense number.");
+        }
     }
 }
