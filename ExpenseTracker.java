@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 class Expense implements Serializable {
@@ -25,7 +27,8 @@ public class ExpenseTracker {
             System.out.println("5. Update Expense");
             System.out.println("6. Save Expenses");
             System.out.println("7. Load Expenses");
-            System.out.println("8. Exit");
+            System.out.println("8. List Expenses by Amount");
+            System.out.println("9. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -59,6 +62,8 @@ public class ExpenseTracker {
             } else if (choice == 7) {
                 loadExpenses();
             } else if (choice == 8) {
+                listExpensesByAmount();
+            } else if (choice == 9) {
                 break;
             } else {
                 System.out.println("Invalid choice. Please try again.");
@@ -122,6 +127,15 @@ public class ExpenseTracker {
             System.out.println("Expenses loaded successfully.");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error loading expenses: " + e.getMessage());
+        }
+    }
+
+    private static void listExpensesByAmount() {
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses available.");
+        } else {
+            Collections.sort(expenses, Comparator.comparingDouble(exp -> exp.amount));
+            listExpenses();
         }
     }
 }
