@@ -19,7 +19,8 @@ public class ExpenseTracker {
         while (true) {
             System.out.println("\n1. Add Expense");
             System.out.println("2. List Expenses");
-            System.out.println("3. Exit");
+            System.out.println("3. Display Total Expenses");
+            System.out.println("4. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -33,6 +34,8 @@ public class ExpenseTracker {
             } else if (choice == 2) {
                 listExpenses();
             } else if (choice == 3) {
+                displayTotalExpenses();
+            } else if (choice == 4) {
                 break;
             } else {
                 System.out.println("Invalid choice. Please try again.");
@@ -49,5 +52,13 @@ public class ExpenseTracker {
                 System.out.println(expense.description + ": $" + expense.amount);
             }
         }
+    }
+
+    private static void displayTotalExpenses() {
+        double total = 0;
+        for (Expense expense : expenses) {
+            total += expense.amount;
+        }
+        System.out.println("Total Expenses: $" + total);
     }
 }
