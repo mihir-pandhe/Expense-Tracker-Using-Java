@@ -1,7 +1,8 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Expense {
+class Expense implements Serializable {
     String description;
     double amount;
 
@@ -22,7 +23,9 @@ public class ExpenseTracker {
             System.out.println("3. Display Total Expenses");
             System.out.println("4. Delete Expense");
             System.out.println("5. Update Expense");
-            System.out.println("6. Exit");
+            System.out.println("6. Save Expenses");
+            System.out.println("7. Load Expenses");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -52,6 +55,10 @@ public class ExpenseTracker {
                 double amount = scanner.nextDouble();
                 updateExpense(index - 1, description, amount);
             } else if (choice == 6) {
+                saveExpenses();
+            } else if (choice == 7) {
+                loadExpenses();
+            } else if (choice == 8) {
                 break;
             } else {
                 System.out.println("Invalid choice. Please try again.");
@@ -96,6 +103,25 @@ public class ExpenseTracker {
             System.out.println("Expense updated successfully.");
         } else {
             System.out.println("Invalid expense number.");
+        }
+    }
+
+    private static void saveExpenses() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("expenses.dat"))) {
+            oos.writeObject(expenses);
+            System.out.println("Expenses saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Error saving expenses: " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void loadExpenses() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("expenses.dat"))) {
+            expenses = (ArrayList<Expense>) ois.readObject();
+            System.out.println("Expenses loaded successfully.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading expenses: " + e.getMessage());
         }
     }
 }
